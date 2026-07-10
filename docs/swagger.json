@@ -1,0 +1,43 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Allied Software Engineers Inventory API",
+    "version": "1.0.0",
+    "description": "Production ready OpenAPI specification for Enterprise Inventory Management System tracking."
+  },
+  "servers": [
+    { "url": "http://localhost:5000/api", "description": "Local Development instance Server" }
+  ],
+  "paths": {
+    "/auth/login": {
+      "post": {
+        "summary": "Authenticate user session securely",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string", "example": "admin@test.com" },
+                  "password": { "type": "string", "example": "password123" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Bearer JSON Web Token authentication block returned successfully." },
+          "401": { "description": "Invalid authentication credentials rejected." }
+        }
+      }
+    },
+    "/products": {
+      "get": { "summary": "Retrieve complete system master stock list catalog" },
+      "post": { "summary": "Create new validated inventory SKU object record (Admin/Manager exclusive)" }
+    },
+    "/orders": {
+      "post": { "summary": "Submit unified wholesale consumer order with automated dynamic stock level inventory reductions" }
+    }
+  }
+}

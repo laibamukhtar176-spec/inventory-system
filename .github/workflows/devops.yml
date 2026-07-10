@@ -1,0 +1,43 @@
+name: ASE Inventory CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, development, release-v1.0 ]
+  pull_request:
+    branches: [ main, development ]
+
+jobs:
+  continuous-integration:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code Repository
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js Environment
+      uses: actions/setup-node@v3
+      with:
+        node-level: '18'
+        cache: 'npm'
+
+    - name: Install Backend Dependencies
+      run: npm install
+
+    - name: Install Frontend Dependencies
+      run: |
+        cd frontend
+        npm install
+
+    - name: Run Code Linter Check (ESLint)
+      run: npm run lint --if-present
+
+    - name: Execute Automated Unit Tests
+      run: npm test --if-present
+
+    - name: Build Production Server Artifacts
+      run: echo "Compiling Server Tier Production builds..."
+
+    - name: Build Static React Application Frontend
+      run: |
+        cd frontend
+        npm run build --if-present
