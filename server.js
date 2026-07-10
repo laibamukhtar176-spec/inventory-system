@@ -17,3 +17,6 @@ mongoose.connect('mongodb://localhost:2017/inventory', {
 
 const PORT = 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Purane code ke neeche yeh line add karein:
+const productRoutes = require('./routes/product');
+app.use('/api/products', productRoutes);
