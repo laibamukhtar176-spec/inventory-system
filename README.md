@@ -1,6 +1,8 @@
 # Allied Software Engineers - Enterprise Inventory System (v1.0.0)
 ## Repository Link
-[GitHub Repository](https://laibamukhtar176-spec.github.io/inventory-system/)
+## Project Links
+- [GitHub Repository Code Link](https://github.com/laibamukhtar176-spec/inventory-system)
+- [GitHub Pages Live Link](https://laibamukhtar176-spec.github.io/inventory-system/)
 Production execution matrix for MERN Engine platform deployment.
 
 ## 📂 Architecture Mapping
