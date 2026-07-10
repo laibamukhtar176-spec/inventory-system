@@ -1,25 +1,18 @@
-const jwt = require('jsonwebtoken');
-
-exports.login = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-    if (email === 'admin@test.com') {
-      const token = jwt.sign({ id: 'admin123', role: 'Admin' }, process.env.JWT_SECRET || 'SUPER_SECRET_KEY_12345', { expiresIn: '1d' });
-      return res.json({ token, role: 'Admin', name: 'System Admin' });
-    } 
-    
-    if (email === 'manager@test.com') {
-      const token = jwt.sign({ id: 'mgr123', role: 'Manager' }, process.env.JWT_SECRET || 'SUPER_SECRET_KEY_12345', { expiresIn: '1d' });
-      return res.json({ token, role: 'Manager', name: 'Store Manager' });
-    }
-
-    return res.status(401).json({ message: 'Invalid credentials. Use admin@test.com' });
-  } catch (err) { 
-    res.status(500).json({ error: err.message }); 
-  }
-};
+const User = require('../models/User');
 
 exports.register = async (req, res) => {
-  res.status(201).json({ message: 'User registered successfully' });
+  try {
+    const { username, email, password, role } = req.body;
+    
+    // Check if user already exists
+    let user = await User.findOne({ email });
+    if (user) return res.status(400).json({ message: "User already exists" });
+
+    user = new User({ username, email, password, role });
+    await user.save();
+
+    res.status(201).json({ message: "User registered successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
 };
