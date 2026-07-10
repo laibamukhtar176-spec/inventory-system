@@ -1,40 +1,18 @@
-// Local mock data store
-let products = [];
+const Product = require('../models/Product');
 
 exports.createProduct = async (req, res) => {
   try {
-    const { productName, category, supplier, purchasePrice, sellingPrice, quantity, minimumStockLevel } = req.body;
+    const { productCode, productName, category, supplier, purchasePrice, sellingPrice, quantity } = req.body;
 
-    // Module 2 Validations
-    if (Number(sellingPrice) < Number(purchasePrice)) {
-      return res.status(400).json({ message: 'Selling Price cannot be lower than Purchase Price.' });
-    }
-    if (Number(quantity) < 0) {
-      return res.status(400).json({ message: 'Quantity cannot be negative' });
+    // Assignment Rule: Selling Price cannot be lower than Purchase Price[cite: 1]
+    if (sellingPrice < purchasePrice) {
+      return res.status(400).json({ message: "Selling price cannot be lower than purchase price" });
     }
 
-    // Auto-generate Product Code (Module 2)
-    const sequence = String(products.length + 1).padStart(4, '0');
-    const productCode = `ASE-PRD-${sequence}`;
-
-    const newProduct = {
-      _id: `prod_${Date.now()}`,
-      productCode, productName, category, supplier, 
-      purchasePrice: Number(purchasePrice), 
-      sellingPrice: Number(sellingPrice), 
-      quantity: Number(quantity), 
-      minimumStockLevel: Number(minimumStockLevel || 5),
-      productImage: 'placeholder.jpg'
-    };
-
-    products.push(newProduct);
-    res.status(201).json(newProduct);
-  } catch (err) { res.status(400).json({ error: err.message }); }
+    const newProduct = new Product({ productCode, productName, category, supplier, purchasePrice, sellingPrice, quantity });
+    await newProduct.save();
+    res.status(201).json({ message: "Product added successfully", newProduct });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
 };
-
-exports.getProducts = async (req, res) => {
-  res.json(products);
-};
-
-// Export raw list for order tracking linkups
-exports.mockProductsStore = products;
