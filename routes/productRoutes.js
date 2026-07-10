@@ -1,10 +1,7 @@
 const express = require('express');
-const { createProduct, getProducts } = require('../controllers/productController');
-const { protect, authorizeRoles } = require('../middleware/auth');
 const router = express.Router();
+const { createProduct } = require('../controllers/productController');
 
-router.route('/')
-  .get(protect, getProducts)
-  .post(protect, authorizeRoles('Admin', 'Manager'), createProduct);
+router.post('/add', createProduct);
 
 module.exports = router;
